@@ -13,5 +13,10 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss()
     ]
-  }
+  },
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://localhost:8080',
+    },
+  },
 })
