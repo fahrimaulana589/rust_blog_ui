@@ -10,20 +10,21 @@
     </UDashboardSidebar>
 
     <!-- MAIN -->
-    <UDashboardPanel class="flex flex-col">
+    <UDashboardPanel>
       <!-- NAVBAR -->
-      <UDashboardNavbar>
-        <template #right>
-          <UDropdownMenu :items="item_profiles">
-            <UAvatar src="https://i.pravatar.cc/40" size="sm" />
-          </UDropdownMenu>
-        </template>
-      </UDashboardNavbar>
+      <template #header>
+        <UDashboardNavbar>
+          <template #right>
+            <UDropdownMenu :items="item_profiles">
+              <UAvatar src="https://i.pravatar.cc/40" size="sm" />
+            </UDropdownMenu>
+          </template>
+        </UDashboardNavbar>
+      </template>
 
-      <!-- CONTENT -->
-      <div class="flex-1 p-4">
+      <template #body>
         <slot />
-      </div>
+      </template>
     </UDashboardPanel>
 
     <!-- LOGOUT MODAL -->

@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="admin">
-    <h1 class="text-2xl font-bold mb-4">Admin Dashboard</h1>
+    <h1 class="text-2xl font-bold">Admin Dashboard</h1>
   </NuxtLayout>
 </template>
 
