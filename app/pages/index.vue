@@ -2,6 +2,8 @@
     <h1 class="text-3xl">Home</h1>
 </template> 
 
-<script setup>
-    
+<script setup lang="ts">
+definePageMeta({
+  name: 'home'
+})
 </script>

@@ -11,6 +11,10 @@
     middleware: 'auth',
     name: 'admin'
   })
+
+  useHead({
+    title: 'Admin Dashboard'
+  })
 </script>
 
 <style>

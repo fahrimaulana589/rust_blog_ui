@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-    const { token } = useAuth()
+  const { token } = useAuth()
 
-    if (!token.value) {
-        return navigateTo({name: 'admin-login'})
-    }
+  if (!token.value) {
+    return navigateTo({name: 'admin-login'})
+  }
 })

@@ -3,8 +3,8 @@ import * as v from 'valibot'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 const schema = v.object({
-  username: v.pipe(v.string()),
-  password: v.pipe(v.string())
+  username: v.pipe(v.string(), v.nonEmpty('Username is required')),
+  password: v.pipe(v.string(), v.nonEmpty('Password is required'))
 })
 
 type Schema = v.InferOutput<typeof schema>
@@ -36,8 +36,8 @@ useHead({
 })
 
 definePageMeta({
-    middleware: 'guest',
-    name: 'admin-login'
+  middleware: 'guest',
+  name: 'admin-login'
 })
 
 </script>
@@ -62,7 +62,7 @@ definePageMeta({
         </UFormField>
 
         <div class="text-sm">
-            <NuxtLink to="/admin/forgot-password" class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400">
+            <NuxtLink :to="{name: 'admin-forgot-password'}" class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400">
                 Forgot password?
             </NuxtLink>
         </div>

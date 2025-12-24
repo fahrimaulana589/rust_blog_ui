@@ -1,6 +1,6 @@
 export const useAuth = () => {
   const token = useCookie<string | null>('auth_token')
-  const user = useState<any | null>('auth_user', () => null)
+  const email = useState<string | null>('auth_email', () => null)
   const loading = useState<boolean>('auth_loading', () => false)
 
   const login = async (username: string, password: string) => {
@@ -10,15 +10,15 @@ export const useAuth = () => {
       const res = await $fetch<any>('/api/login', {
         method: 'POST',
         body: {
-          username,
-          password
+          username: username,
+          password: password
         }
       })
 
       // SuccessResponse_LoginResponseDto
       if (res?.data?.token) {
         token.value = res.data.token
-        user.value = res.data.user ?? res.data
+        email.value = res.data.email
         return true
       }
 
@@ -33,15 +33,68 @@ export const useAuth = () => {
 
   const logout = () => {
     token.value = null
-    user.value = null
+    email.value = null
     navigateTo({name: 'admin-login'})
+  }
+
+  const forgotPassword = async (email: string) => {
+    loading.value = true
+
+    try {
+      const res = await $fetch<any>('/api/forgot-password', {
+        method: 'POST',
+        body: {
+          email: email
+        }
+      })
+
+      // SuccessResponse_ForgotPasswordResponseDto
+      if (res?.message) {
+        return res.message
+      }
+
+      return false
+    } catch (err) {
+      console.error('Forgot password failed:', err)
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const resetPassword = async (token: string, new_password: string) => {
+    loading.value = true
+
+    try {
+      const res = await $fetch<any>('/api/reset-password', {
+        method: 'POST',
+        body: {
+          token: token,
+          new_password: new_password
+        }
+      })
+
+      // SuccessResponse_ResetPasswordResponseDto
+      if (res?.message) {
+        return res.message
+      }
+
+      return false
+    } catch (err) {
+      console.error('Reset password failed:', err)
+      return false
+    } finally {
+      loading.value = false
+    }
   }
 
   return {
     token,
-    user,
+    email,
     loading,
     login,
-    logout
+    logout,
+    forgotPassword,
+    resetPassword
   }
 }
