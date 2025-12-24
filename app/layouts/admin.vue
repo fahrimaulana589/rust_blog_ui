@@ -56,6 +56,11 @@ const item_sidebars = ref([
     label: 'Dashboard',
     icon: 'i-lucide-book-open',
     to: {name: 'admin'}
+  },
+  {
+    label: 'Profile',
+    icon: 'i-lucide-user',
+    to: {name: 'admin-profile'}
   }
 ])
 
