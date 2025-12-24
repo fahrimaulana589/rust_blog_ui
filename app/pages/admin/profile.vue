@@ -28,6 +28,27 @@ const items = ref([
   }
 ])
 
+const { get_profile, loading } = useProfile()
+
+const toast = useToast()
+
+const profile = reactive({
+  
+})
+
+onMounted(async () => {
+  try {
+    const data = await get_profile()
+    if(data) {
+      
+    }else{
+      navigateTo({name: 'admin-login'})
+    }
+  } catch (err) {
+    toast.add({ title: 'Error', description: 'An error occurred during get profile', color: 'error' })
+  }
+})
+
 </script>
 
 <style>

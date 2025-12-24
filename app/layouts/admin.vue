@@ -4,7 +4,6 @@
     <UDashboardSidebar>
       <UNavigationMenu 
         :items="item_sidebars"
-        :collapsed="collapsed" 
         orientation="vertical"
         tooltip
       />
@@ -30,9 +29,9 @@
     <!-- LOGOUT MODAL -->
     <UModal title="Warning" v-model:open="isLogoutModalOpen" :dismissible="false">
         <template #body>
-            <Placeholder class="h-48" >
+            <div class="h-48" >
                 Are you sure you want to logout?
-            </Placeholder>
+            </div>
         </template>
         <template #footer>
             <div class="flex gap-2 w-full justify-end">
