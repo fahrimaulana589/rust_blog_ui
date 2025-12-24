@@ -34,7 +34,7 @@ export const useAuth = () => {
   const logout = () => {
     token.value = null
     user.value = null
-    navigateTo('/admin/login')
+    navigateTo({name: 'admin-login'})
   }
 
   return {

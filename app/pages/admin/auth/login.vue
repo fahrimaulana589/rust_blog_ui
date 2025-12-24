@@ -34,6 +34,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 useHead({
   title: 'Admin Login'
 })
+
+definePageMeta({
+    middleware: 'guest',
+    name: 'admin-login'
+})
+
 </script>
 
 <template>

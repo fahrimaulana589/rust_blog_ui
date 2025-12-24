@@ -55,7 +55,7 @@ const item_sidebars = ref([
   {
     label: 'Dashboard',
     icon: 'i-lucide-book-open',
-    to: 'admin'
+    to: {name: 'admin'}
   }
 ])
 
