@@ -59,8 +59,8 @@
         <UInputTags v-model="state.tech_focus" class="w-full" placeholder="Enter your tech focus" icon="i-heroicons-user" />
       </UFormField>
 
-      <UFormField label="Languages" name="languages">
-        <UInputTags v-model="state.languages" class="w-full" placeholder="Enter your languages" icon="i-heroicons-user" />
+      <UFormField label="Languages" name="languages" help="Format: Language : Level (e.g. English : Native)">
+        <UInputTags v-model="state.languages" class="w-full" placeholder="Enter languages (e.g. English : Native)" icon="i-heroicons-user" />
       </UFormField>
 
       <UButton type="submit" block class="w-full" :loading="loading">
@@ -96,7 +96,7 @@ const items = ref([
   }
 ])
 
-const { get_profile, loading } = useProfile()
+const { get_profile, loading, update_profile } = useProfile()
 const { logout } = useAuth()
 
 const toast = useToast()
@@ -114,9 +114,9 @@ const state = reactive({
   email: '',
   work_philosophy: '',
   timezone: '',
-  specializations: [],
-  tech_focus: [],
-  languages: []
+  specializations: [] as string[],
+  tech_focus: [] as string[],
+  languages: [] as string[]
 })
 
 onMounted(async () => {
@@ -138,12 +138,11 @@ onMounted(async () => {
       state.specializations = res.data.specializations
       state.tech_focus = res.data.tech_focus
       console.log(res.data.languages)
-      state.languages = res.data.languages.map((language: {name: string, level: string}) => {
+      state.languages = res.data.languages.map((language) => {
         return language.name+" : "+language.level
       })
-    }else{
-      logout()
     }
+
   } catch (err) {
     toast.add({ title: 'Error', description: 'An error occurred during get profile', color: 'error' })
   }
@@ -170,17 +169,27 @@ const schema = v.object({
 type Schema = v.InferOutput<typeof schema>
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // try {
-  //   const success = await update_profile(event.data)
-  //   if (success) {
-  //     toast.add({ title: 'Success', description: 'Profile updated successfully' })
-  //     await navigateTo('/admin')
-  //   } else {
-  //     toast.add({ title: 'Error', description: 'An error occurred during update profile', color: 'error' })
-  //   }
-  // } catch (error) {
-  //   toast.add({ title: 'Error', description: 'An error occurred during update profile', color: 'error' })
-  // }
+  try {
+    const defaultData = {
+      ...event.data,
+      languages: event.data.languages.map((lang) => {
+        const parts = lang.split(/\s*[:]\s*/) // Split by colon with optional whitespace
+        const name = parts[0]
+        const level = (parts.length > 1 && parts[1]) ? parts[1] : 'Basic' // Default to Basic if no level provided
+        return { name: name || lang, level: level }
+      })
+    }
+
+    const success = await update_profile(defaultData)
+    
+    if (success) {
+      toast.add({ title: 'Success', description: 'Profile updated successfully' })
+    } else {
+      toast.add({ title: 'Error', description: 'An error occurred during update profile', color: 'error' })
+    }
+  } catch (error) {
+    toast.add({ title: 'Error', description: 'An error occurred during update profile', color: 'error' })
+  }
 }
 
 </script>
