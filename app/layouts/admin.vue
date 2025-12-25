@@ -65,21 +65,37 @@ const item_sidebars = ref([
     to: {name: 'admin-profile'}
   },
   {
-    label: 'Project',
-    icon: 'i-lucide-settings',
+    label: 'Projects',
+    icon: 'i-lucide-folder-open',
+    to: {name: 'admin-projects'}
+  },  
+  {
+    label: 'Master Data',
+    icon: 'i-lucide-database',
     open: true,
     children: [
       {
-        label: 'All Projects',
-        icon: 'i-lucide-folder-open',
-        to: {name: 'admin-projects'}
+        label: 'Categories',
+        icon: 'i-lucide-tag',
+        to: {name: 'admin-categories'}
       },
+      {
+        label: 'Tags',
+        icon: 'i-lucide-hash',
+        to: {name: 'admin-tags'}
+      },
+
       {
         label: 'Stacks',
         icon: 'i-lucide-layers',
         to: {name: 'admin-stacks'}
       }
     ]
+  },
+  {
+    label: 'Blogs',
+    icon: 'i-lucide-file-text',
+    to: {name: 'admin-blogs'}
   },
 ])
 
