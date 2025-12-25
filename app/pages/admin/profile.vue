@@ -97,7 +97,6 @@ const items = ref([
 ])
 
 const { get_profile, loading, update_profile } = useProfile()
-const { logout } = useAuth()
 
 const toast = useToast()
 
