@@ -180,7 +180,8 @@ const fetchData = async () => {
 }
 
 const fetchStacks = async () => {
-   const res = await getStacks(-1)
+   const res = await getStacks(1,-1)
+   console.log(res)
    if (res) stacks.value = res.data.items
 }
 
