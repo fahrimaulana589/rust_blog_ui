@@ -27,7 +27,7 @@
       <template #body>
         <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
           <UFormField label="Stack Name" name="nama_stack">
-            <UInput class="w-full" v-model="state.nama_stack" placeholder="e.g. Vue.js" autofocus />
+            <UInput class="w-full" v-model="state.nama_stack" placeholder="e.g. Vue.js" />
           </UFormField>
           
           <div class="flex justify-end gap-2 mt-6">

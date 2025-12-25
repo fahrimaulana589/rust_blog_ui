@@ -27,7 +27,7 @@
       <template #body>
         <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
           <UFormField label="Category Name" name="name">
-            <UInput class="w-full" v-model="state.name" placeholder="Category Name" autofocus />
+            <UInput class="w-full" v-model="state.name" placeholder="Category Name" />
           </UFormField>
           
           <div class="flex justify-end gap-2 mt-6">
