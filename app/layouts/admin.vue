@@ -68,6 +68,11 @@ const item_sidebars = ref([
     label: 'Projects',
     icon: 'i-lucide-folder-open',
     to: {name: 'admin-projects'}
+  },
+  {
+    label: 'Stacks',
+    icon: 'i-lucide-layers',
+    to: {name: 'admin-stacks'}
   }
 ])
 

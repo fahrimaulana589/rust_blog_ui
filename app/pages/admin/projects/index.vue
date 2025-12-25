@@ -30,7 +30,7 @@
       
       <!-- Pagination (Optional handling) -->
       <div class="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700">
-        <UPagination v-model:page="page" :items-per-page="pageCount" :total="totalItems" />
+        <UPagination v-model:page="page" :items-per-page="limit" :total="totalItems" />
       </div>
     </UCard>
 
@@ -170,11 +170,9 @@ const fetchData = async () => {
   try {
      const res = await getProjects(page.value, limit)
      if (res?.data) {
-       projects.value = res.data.items
-       totalItems.value = res.data.meta.total_items
-       // Update pageCount if meta provides total_pages or calc it
-       if (res.data.meta.total_pages) pageCount.value = limit // UTable pagination page-count is actually items-per-page usually? NO, page-count prop on UPagination is "Total pages to generate" OR items per page? 
-       // NuxtUI Pagination: :page-count means "How many items displayed per page". :total is total items.
+        projects.value = res.data.items
+        totalItems.value = res.data.meta.total_items
+        pageCount.value = res.data.meta.total_pages
      }
   } catch (e) {
      toast.add({ title: 'Error', description: 'Failed to fetch projects', color: 'error' })
@@ -182,8 +180,8 @@ const fetchData = async () => {
 }
 
 const fetchStacks = async () => {
-   const res = await getStacks()
-   if (res) stacks.value = res
+   const res = await getStacks(-1)
+   if (res) stacks.value = res.data.items
 }
 
 // Watch page change

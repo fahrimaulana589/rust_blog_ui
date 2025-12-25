@@ -1,35 +1,99 @@
-import type { StackDto } from '../types/dto/stack.dto'
+import type { StackDto, CreateStackDto, UpdateStackDto } from '../types/dto/stack.dto'
 
 export const useStacks = () => {
   const token = useCookie<string | null>('auth_token')
   const loading = useState<boolean>('stacks_loading', () => false)
 
+  interface Meta {
+    page: number;
+    per_page: number;
+    total_pages: number;
+    total_items: number;
+  }
+
   interface StacksResponse {
     message: string;
     data: {
       items: StackDto[];
-      // meta might be present if paginated, but for dropdown we might just need items or fetch all
+      meta?: Meta;
     }
   }
 
-  const getStacks = async () => {
+  const getStacks = async (page = 1, per_page = 10) => {
     loading.value = true
     try {
-      // Assuming we can fetch all or paginate. For dropdown we usuall want all.
-      // If backend paginates default, we might get first page.
-      // Let's assume per_page=100 for now or handle pagination/search later.
       const res = await $fetch<StacksResponse>('/api/app/stacks', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token.value}`
         },
-        query: { per_page: 100 }
+        query: { 
+          page: page, 
+          per_page: per_page 
+        }
       })
-      const data = (Array.isArray(res) ? res : (Array.isArray(res?.data) ? res.data : res?.data?.items)) || []
-      return data
+      return res
     } catch (err) {
       console.error('Fetch stacks failed:', err)
-      return []
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const getStack = async (id: number) => {
+    loading.value = true
+    try {
+      return await $fetch<StackDto>(`/api/app/stacks/${id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token.value}`
+        }
+      })
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const createStack = async (payload: CreateStackDto) => {
+    loading.value = true
+    try {
+      return await $fetch('/api/app/stacks', {
+        method: 'POST' as any,
+        headers: {
+          'Authorization': `Bearer ${token.value}`
+        },
+        body: payload
+      })
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const updateStack = async (id: number, payload: UpdateStackDto) => {
+    loading.value = true
+    try {
+      return await $fetch(`/api/app/stacks/${id}`, {
+        method: 'PUT' as any,
+        headers: {
+          'Authorization': `Bearer ${token.value}`
+        },
+        body: payload
+      })
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const deleteStack = async (id: number) => {
+    loading.value = true
+    try {
+      return await $fetch(`/api/app/stacks/${id}`, {
+        method: 'DELETE' as any,
+        headers: {
+          'Authorization': `Bearer ${token.value}`
+        }
+      })
     } finally {
       loading.value = false
     }
@@ -37,6 +101,10 @@ export const useStacks = () => {
 
   return {
     loading,
-    getStacks
+    getStacks,
+    createStack,
+    updateStack,
+    deleteStack,
+    getStack,
   }
 }
