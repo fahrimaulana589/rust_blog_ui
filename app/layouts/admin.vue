@@ -65,15 +65,22 @@ const item_sidebars = ref([
     to: {name: 'admin-profile'}
   },
   {
-    label: 'Projects',
-    icon: 'i-lucide-folder-open',
-    to: {name: 'admin-projects'}
+    label: 'Project',
+    icon: 'i-lucide-settings',
+    open: true,
+    children: [
+      {
+        label: 'All Projects',
+        icon: 'i-lucide-folder-open',
+        to: {name: 'admin-projects'}
+      },
+      {
+        label: 'Stacks',
+        icon: 'i-lucide-layers',
+        to: {name: 'admin-stacks'}
+      }
+    ]
   },
-  {
-    label: 'Stacks',
-    icon: 'i-lucide-layers',
-    to: {name: 'admin-stacks'}
-  }
 ])
 
 const item_profiles = ref([
