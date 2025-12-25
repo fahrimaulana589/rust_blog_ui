@@ -34,7 +34,7 @@ export const useAuth = () => {
   const logout = () => {
     token.value = null
     email.value = null
-    navigateTo({name: 'admin-login'})
+    navigateTo({ name: 'admin-login' })
   }
 
   const forgotPassword = async (email: string) => {
@@ -88,6 +88,30 @@ export const useAuth = () => {
     }
   }
 
+
+  const checkLogin = async () => {
+    loading.value = true
+    try {
+      const res = await $fetch<any>('/api/is-login', {
+        headers: {
+          'Authorization': `Bearer ${token.value}`
+        }
+      })
+
+      if (res?.status === false) {
+        throw new Error('Unauthorized')
+      }
+
+      return true
+    } catch (err) {
+      token.value = null
+      email.value = null
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     token,
     email,
@@ -95,6 +119,7 @@ export const useAuth = () => {
     login,
     logout,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    checkLogin
   }
 }

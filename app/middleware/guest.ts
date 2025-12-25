@@ -1,7 +1,8 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-  const {token} = useAuth()
-  
-  if (token.value) {
-    return navigateTo({name: 'admin'})
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const { checkLogin } = useAuth()
+
+  const isLogged = await checkLogin()
+  if (isLogged) {
+    return navigateTo({ name: 'admin' })
   }
 })
