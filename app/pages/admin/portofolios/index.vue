@@ -130,7 +130,7 @@ const state = reactive({
 // Columns
 const columns: TableColumn<PortofolioDto>[] = [
   { accessorKey: 'judul', header: 'Judul' },
-  { accessorKey: 'project_id', header: 'Project ID' },
+  { accessorKey: 'project.nama_projek', header: 'Project' },
   { accessorKey: 'deskripsi', header: 'Deskripsi' },
   { accessorKey: 'is_active', header: 'Is Active' },
   { id: 'actions', header: 'Actions' }
@@ -190,7 +190,7 @@ const openEditModal = (portofolio: PortofolioDto) => {
   // Populate form
   state.id = portofolio.id
   state.judul = portofolio.judul
-  state.project_id = portofolio.project_id
+  state.project_id = portofolio.project.id
   state.deskripsi = portofolio.deskripsi
   state.is_active = portofolio.is_active
 

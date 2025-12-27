@@ -1,6 +1,8 @@
+import type { ProjectDto } from "./project.dto";
+
 export interface PortofolioDto {
   id: number;
-  project_id: number;
+  project: ProjectDto;
   judul: string;
   slug: string;
   deskripsi: string;
