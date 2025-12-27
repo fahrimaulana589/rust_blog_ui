@@ -133,8 +133,8 @@ const schema = v.object({
   deskripsi: v.pipe(v.string(), v.nonEmpty('Description is required')),
   status: v.pipe(v.string(), v.nonEmpty('Status is required'),v.picklist(['ONGOING', 'COMPLETED', 'DRAFT'])), // enum(['ongoing', 'completed', 'draft'])
   progress: v.pipe(v.number(), v.minValue(0), v.maxValue(100)),
-  link_demo: v.string(), // Optional in API? Assuming optional or string
-  repository: v.string(),
+  link_demo: v.nullable(v.string()), // Optional in API? Assuming optional or string
+  repository: v.nullable(v.string()),
   tanggal_mulai: v.pipe(v.string(), v.nonEmpty('Start date is required')),
   tanggal_selesai: v.nullable(v.string()),
   stack_ids: v.array(v.number())
@@ -148,8 +148,8 @@ const state = reactive({
   deskripsi: '',
   status: 'ONGOING',
   progress: 0,
-  link_demo: '',
-  repository: '',
+  link_demo: null as string | null | undefined,
+  repository: null as string | null | undefined,
   tanggal_mulai: '',
   tanggal_selesai: null as string | null | undefined,
   stack_ids: [] as number[]

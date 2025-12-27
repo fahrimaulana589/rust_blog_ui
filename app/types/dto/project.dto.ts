@@ -9,9 +9,9 @@ export interface ProjectDto {
   deskripsi: string;
   status: string;
   progress: number;
-  link_demo: string;
+  link_demo: string | null;
   slug: string;
-  repository: string;
+  repository: string | null;
   tanggal_mulai: string;
   tanggal_selesai: string | null;
   stacks: ProjectStackDto[];
@@ -24,8 +24,8 @@ export interface CreateProjectDto {
   deskripsi: string;
   status: string;
   progress: number;
-  link_demo: string;
-  repository: string;
+  link_demo: string | null;
+  repository: string | null;
   tanggal_mulai: string;
   tanggal_selesai: string | null;
   stack_ids: number[];
