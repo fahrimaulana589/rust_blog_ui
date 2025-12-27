@@ -68,7 +68,12 @@ const item_sidebars = ref([
     label: 'Projects',
     icon: 'i-lucide-folder-open',
     to: {name: 'admin-projects'}
-  },  
+  },
+  {
+    label: 'Portofolios',
+    icon: 'i-lucide-briefcase',
+    to: {name: 'admin-portofolios'}
+  },
   {
     label: 'Master Data',
     icon: 'i-lucide-database',

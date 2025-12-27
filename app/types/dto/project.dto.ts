@@ -10,6 +10,7 @@ export interface ProjectDto {
   status: string;
   progress: number;
   link_demo: string;
+  slug: string;
   repository: string;
   tanggal_mulai: string;
   tanggal_selesai: string | null;
