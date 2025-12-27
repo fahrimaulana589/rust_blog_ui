@@ -188,7 +188,7 @@ const handleDelete = async () => {
     isDeleteModalOpen.value = false
     fetchData()
   } catch (e: any) {
-    const msg = e.response?._data?.message || e.message || 'Failed to delete category'
+    const msg = 'Failed to delete category'
     toast.add({ title: 'Error', description: msg, color: 'error' })
   }
 }

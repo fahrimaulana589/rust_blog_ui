@@ -276,7 +276,7 @@ const handleDelete = async () => {
     isDeleteModalOpen.value = false
     fetchData()
   } catch (e: any) {
-    const msg = e.response?._data?.message || e.message || 'Failed to delete project'
+    const msg = 'Failed to delete project'
     toast.add({ title: 'Error', description: msg, color: 'error' })
   }
 }

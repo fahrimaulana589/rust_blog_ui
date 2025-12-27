@@ -185,7 +185,7 @@ const handleDelete = async () => {
     isDeleteModalOpen.value = false
     fetchData()
   } catch (e: any) {
-    const msg = e.response?._data?.message || e.message || 'Failed to delete stack'
+    const msg = 'Failed to delete stack'
     toast.add({ title: 'Error', description: msg, color: 'error' })
   }
 }

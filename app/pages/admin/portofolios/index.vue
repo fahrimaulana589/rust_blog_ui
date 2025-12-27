@@ -254,7 +254,7 @@ const handleDelete = async () => {
     isDeleteModalOpen.value = false
     fetchData()
   } catch (e: any) {
-    const msg = e.response?._data?.message || e.message || 'Failed to delete portofolio'
+    const msg = 'Failed to delete portofolio'
     toast.add({ title: 'Error', description: msg, color: 'error' })
   }
 }

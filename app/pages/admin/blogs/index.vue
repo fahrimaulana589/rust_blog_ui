@@ -332,7 +332,7 @@ const handleDelete = async () => {
     isDeleteModalOpen.value = false
     fetchData()
   } catch (e: any) {
-    const msg = e.response?._data?.message || e.message || 'Failed to delete blog'
+    const msg = 'Failed to delete blog'
     toast.add({ title: 'Error', description: msg, color: 'error' })
   }
 }
