@@ -9,7 +9,7 @@
     <UCard>
       <UTable :data="projects" :columns="columns" :loading="loading">
         <template #status-cell="{ row }">
-          <UBadge :color="row.original.status === 'ongoing' ? 'primary' : 'success'" variant="subtle">{{ row.original.status }}</UBadge>
+          <UBadge :color="row.original.status === 'COMPLETED' ? 'success' : 'neutral'" variant="subtle">{{ row.original.status }}</UBadge>
         </template>
         <template #progress-cell="{ row }">
           <UProgress v-model="row.original.progress" />

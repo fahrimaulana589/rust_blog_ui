@@ -9,7 +9,7 @@
     <UCard>
       <UTable :data="blogs" :columns="columns" :loading="loading">
         <template #status-cell="{ row }">
-          <UBadge :color="row.original.status === 'published' ? 'success' : 'neutral'" variant="subtle">{{ row.original.status }}</UBadge>
+          <UBadge :color="row.original.status === 'PUBLISHED' ? 'success' : 'neutral'" variant="subtle">{{ row.original.status }}</UBadge>
         </template>
         <template #category-cell="{ row }">
           <span v-if="row.original.category">{{ row.original.category.name }}</span>

@@ -8,6 +8,10 @@
     <!-- Data Table -->
     <UCard>
       <UTable :data="portofolios" :columns="columns" :loading="loading">
+        <template #is_active-cell="{ row }">
+          <UBadge :color="row.original.is_active ? 'success' : 'neutral'" variant="subtle">{{ row.original.is_active ? 'Active' : 'Inactive' }}</UBadge>
+        </template>
+
         <template #actions-cell="{ row }">
           <div class="flex gap-2">
             <UButton icon="i-heroicons-pencil-square" color="warning" variant="ghost" size="xs" @click="openEditModal(row.original)" />
