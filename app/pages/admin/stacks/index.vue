@@ -163,8 +163,16 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     isModalOpen.value = false
     fetchData()
   } catch (e: any) {
-    const msg = e.response?._data?.message || e.message || (isEditMode.value ? 'Failed to update stack' : 'Failed to create stack')
-    toast.add({ title: 'Error', description: msg, color: 'error' })
+  if(e.response.status === 400){
+      const dsc = Object.values(e.response._data.data.errors)
+      .flat()
+      .map(e => '* '+e)
+      .join('\n')
+    
+      toast.add({ title: e.response._data.data.message, description: dsc, color: 'error' })
+    } else{
+      toast.add({ title: 'Error', description: 'Failed to create category', color: 'error' })
+    }
   }
 }
 

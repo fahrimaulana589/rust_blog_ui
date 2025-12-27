@@ -77,7 +77,7 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
              <UFormField label="Status" name="status">
-               <USelect class="w-full" v-model="state.status" :items="['draft', 'published', 'archived']" />
+               <USelect class="w-full" v-model="state.status" :items="['DRAFT', 'PUBLISHED', 'ARCHIVED']" />
              </UFormField>
 
              <UFormField label="Thumbnail URL" name="thumbnail">
@@ -161,8 +161,8 @@ const schema = v.object({
   title: v.pipe(v.string(), v.nonEmpty('Title is required')),
   content: v.pipe(v.string(), v.nonEmpty('Content is required')),
   category_id: v.number('Category is required'),
-  status: v.optional(v.string()),
-  excerpt: v.optional(v.string()),
+  status: v.pipe(v.string(), v.nonEmpty('Status is required'),v.picklist(['DRAFT', 'PUBLISHED','ARCHIVED'])),
+  excerpt: v.pipe(v.string(), v.nonEmpty('Excerpt is required')),
   thumbnail: v.optional(v.string()),
   tag_ids: v.optional(v.array(v.number()))
 })
@@ -174,7 +174,7 @@ const state = reactive({
   title: '',
   content: '',
   category_id: undefined as number | undefined,
-  status: 'draft',
+  status: 'DRAFT',
   excerpt: '',
   thumbnail: '',
   tag_ids: [] as number[]
@@ -276,7 +276,7 @@ const resetForm = () => {
   state.title = ''
   state.content = ''
   state.category_id = undefined
-  state.status = 'draft'
+  state.status = 'DRAFT'
   state.excerpt = ''
   state.thumbnail = ''
   state.tag_ids = []
@@ -310,8 +310,16 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     isModalOpen.value = false
     fetchData()
   } catch (e: any) {
-    const msg = e.response?._data?.message || e.message || (isEditMode.value ? 'Failed to update blog' : 'Failed to create blog')
-    toast.add({ title: 'Error', description: msg, color: 'error' })
+    if(e.response.status === 400){
+      const dsc = Object.values(e.response._data.data.errors)
+      .flat()
+      .map(e => '* '+e)
+      .join('\n')
+    
+      toast.add({ title: e.response._data.data.message, description: dsc, color: 'error' })
+    } else{
+      toast.add({ title: 'Error', description: 'Failed to create category', color: 'error' })
+    }
   }
 }
 

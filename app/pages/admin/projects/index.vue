@@ -47,7 +47,7 @@
           </UFormField>
 
           <UFormField label="Status" name="status">
-            <USelect class="w-full" v-model="state.status" :items="['ongoing', 'completed', 'draft']" />
+            <USelect class="w-full" v-model="state.status" :items="['ONGOING', 'COMPLETED', 'DRAFT']" />
           </UFormField>
 
           <UFormField label="Progress" name="progress">
@@ -131,7 +131,7 @@ const selectedProject = ref<ProjectDto | null>(null)
 const schema = v.object({
   nama_projek: v.pipe(v.string(), v.nonEmpty('Name is required')),
   deskripsi: v.pipe(v.string(), v.nonEmpty('Description is required')),
-  status: v.pipe(v.string(), v.nonEmpty('Status is required'),), // enum(['ongoing', 'completed', 'draft'])
+  status: v.pipe(v.string(), v.nonEmpty('Status is required'),v.picklist(['ONGOING', 'COMPLETED', 'DRAFT'])), // enum(['ongoing', 'completed', 'draft'])
   progress: v.pipe(v.number(), v.minValue(0), v.maxValue(100)),
   link_demo: v.string(), // Optional in API? Assuming optional or string
   repository: v.string(),
@@ -146,7 +146,7 @@ const state = reactive({
   id: undefined as number | undefined,
   nama_projek: '',
   deskripsi: '',
-  status: 'ongoing',
+  status: 'ONGOING',
   progress: 0,
   link_demo: '',
   repository: '',
@@ -254,8 +254,16 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     isModalOpen.value = false
     fetchData()
   } catch (e: any) {
-    const msg = e.response?._data?.message || e.message || (isEditMode.value ? 'Failed to update project' : 'Failed to create project')
-    toast.add({ title: 'Error', description: msg, color: 'error' })
+    if(e.response.status === 400){
+      const dsc = Object.values(e.response._data.data.errors)
+      .flat()
+      .map(e => '* '+e)
+      .join('\n')
+    
+      toast.add({ title: e.response._data.data.message, description: dsc, color: 'error' })
+    } else{
+      toast.add({ title: 'Error', description: 'Failed to create category', color: 'error' })
+    }
   }
 }
 
