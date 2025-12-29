@@ -1,115 +1,22 @@
 <script setup lang="ts">
-// --- MOCK DATA (Sesuai DTO) ---
+const { get_profile } = useProfile()
+const { getBlogs } = useBlogs()
+const { getPortofolios } = usePortofolios()
 
-const profile = useProfileData()
+const { data: profile } = await useAsyncData('home-profile', async () => {
+  const res = await get_profile()
+  return (res && typeof res !== 'boolean' && res.data) ? res.data : null
+})
 
-const categories = ref([
-  { id: 1, name: "Tutorial" },
-  { id: 2, name: "Technology" },
-  { id: 3, name: "Career" }
-])
+const { data: blogs } = await useAsyncData('home-blogs', async () => {
+  const res = await getBlogs(1, 3)
+  return res && res.data && res.data.items ? res.data.items : []
+})
 
-const tags = ref([
-  { id: 1, name: "React" },
-  { id: 2, name: "NestJS" },
-  { id: 3, name: "Productivity" }
-])
-
-const blogs = ref([
-  {
-    id: 1,
-    title: "Memahami Arsitektur Microservices dengan NestJS",
-    slug: "memahami-microservices-nestjs",
-    content: "Microservices adalah arsitektur yang membagi aplikasi menjadi layanan kecil... (Konten lengkap artikel disini). Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    excerpt: "Panduan lengkap memulai microservices menggunakan framework Node.js paling populer.",
-    status: "published",
-    created_at: "2023-10-15",
-    view_count: 1250,
-    thumbnail: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=800",
-    category: categories.value[1],
-    tags: [tags.value[1], tags.value[2]],
-    published_at: "2023-10-15",
-    updated_at: "2023-10-15"
-  },
-  {
-    id: 2,
-    title: "Tips Produktivitas untuk Developer Remote",
-    slug: "tips-produktivitas-remote",
-    content: "Bekerja remote memiliki tantangan tersendiri... (Konten lengkap artikel disini).",
-    excerpt: "Bagaimana menjaga keseimbangan kerja dan hidup saat bekerja dari rumah.",
-    status: "published",
-    created_at: "2023-11-02",
-    view_count: 890,
-    thumbnail: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800",
-    category: categories.value[2],
-    tags: [tags.value[2]],
-    published_at: "2023-11-02",
-    updated_at: "2023-11-02"
-  }
-])
-
-const stacks = ref([
-  { id: 1, nama_stack: "React" },
-  { id: 2, nama_stack: "Tailwind" },
-  { id: 3, nama_stack: "Node.js" },
-  { id: 4, nama_stack: "PostgreSQL" }
-])
-
-const projects = ref([
-  {
-    id: 1,
-    nama_projek: "E-Commerce Dashboard V2",
-    slug: "ecommerce-dashboard-v2",
-    deskripsi: "Dashboard analitik untuk manajemen toko online dengan fitur realtime reporting.",
-    status: "Completed",
-    progress: 100,
-    tanggal_mulai: "2023-01-10",
-    link_demo: "https://demo.com",
-    repository: "https://github.com",
-    stacks: [stacks.value[0], stacks.value[1], stacks.value[3]],
-    tanggal_selesai: "2023-04-10",
-    created_at: "2023-01-10",
-    updated_at: "2023-04-10"
-  },
-  {
-    id: 2,
-    nama_projek: "Sistem Manajemen Inventaris",
-    slug: "inventory-system",
-    deskripsi: "Aplikasi pencatatan stok barang berbasis web untuk UMKM.",
-    status: "In Progress",
-    progress: 65,
-    tanggal_mulai: "2023-08-01",
-    link_demo: null,
-    repository: "https://github.com",
-    stacks: [stacks.value[2], stacks.value[3]],
-    tanggal_selesai: null,
-    created_at: "2023-08-01",
-    updated_at: "2023-08-01"
-  }
-])
-
-const portfolios = ref([
-  {
-    id: 1,
-    project: projects.value[0],
-    judul: "Revamping E-Commerce Analytics",
-    slug: "case-study-ecommerce",
-    deskripsi: "Studi kasus bagaimana kami meningkatkan performa load data hingga 200% pada dashboard admin.",
-    is_active: true,
-    created_at: "2023-05-01",
-    updated_at: "2023-05-01"
-  },
-  {
-    id: 2,
-    project: projects.value[1],
-    judul: "Digitizing Local SME Inventory",
-    slug: "case-study-inventory",
-    deskripsi: "Transformasi pencatatan manual ke digital untuk efisiensi operasional.",
-    is_active: true,
-    created_at: "2023-09-01",
-    updated_at: "2023-09-01"
-  }
-])
+const { data: portfolios } = await useAsyncData('home-portfolios', async () => {
+  const res = await getPortofolios(1, 4)
+  return res && res.data && res.data.items ? res.data.items : []
+})
 
 const navigate = (path: string) => {
   navigateTo(path)
@@ -117,6 +24,7 @@ const navigate = (path: string) => {
 </script>
 
 <template>
+  <NuxtLayout>
     <main class="min-h-[calc(100vh-200px)]">
       
       <!-- HOME PAGE -->
@@ -126,7 +34,7 @@ const navigate = (path: string) => {
           <UContainer class="text-center max-w-3xl">
             <div class="flex justify-center mb-8">
               <UAvatar 
-                :src="profile.profile_image" 
+                :src="profile?.profile_image" 
                 size="3xl" 
                 class="ring-4 ring-white dark:ring-gray-900 shadow-xl"
               />
@@ -134,16 +42,16 @@ const navigate = (path: string) => {
             
             <UBadge color="primary" variant="subtle" size="md" class="mb-6 rounded-full px-3 py-1">
               <span class="w-2 h-2 rounded-full bg-primary-500 mr-2 animate-pulse"></span>
-              {{ profile.availability }}
+              {{ profile?.availability }}
             </UBadge>
             
             <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6 text-gray-900 dark:text-white">
-              Hi, I'm {{ profile.full_name }} <br/>
-              <span class="text-primary-500 dark:text-primary-400">{{ profile.role }}</span>
+              Hi, I'm {{ profile?.full_name }} <br/>
+              <span class="text-primary-500 dark:text-primary-400">{{ profile?.role }}</span>
             </h1>
             
             <p class="text-xl text-gray-500 dark:text-gray-400 mb-10 leading-relaxed">
-              {{ profile.summary }}
+              {{ profile?.summary }}
             </p>
             
             <div class="flex flex-col sm:flex-row justify-center gap-4">
@@ -152,9 +60,8 @@ const navigate = (path: string) => {
             </div>
             
             <div class="mt-12 flex justify-center gap-4">
-              <UButton icon="i-simple-icons-github" color="neutral" variant="ghost" size="lg" to="#" target="_blank" />
-              <UButton icon="i-simple-icons-linkedin" color="neutral" variant="ghost" size="lg" to="#" target="_blank" />
-              <UButton icon="i-heroicons-envelope" color="neutral" variant="ghost" size="lg" to="mailto:alex@example.com" />
+              <UButton v-if="profile?.resume_url" icon="i-heroicons-document-text" color="neutral" variant="ghost" size="lg" :to="profile.resume_url" target="_blank" />
+              <UButton v-if="profile?.email" icon="i-heroicons-envelope" color="neutral" variant="ghost" size="lg" :to="`mailto:${profile.email}`" />
             </div>
           </UContainer>
         </div>
@@ -178,7 +85,7 @@ const navigate = (path: string) => {
               >
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent z-10" />
                 <img 
-                  :src="`https://source.unsplash.com/random/800x600?tech,${item.id}`" 
+                  :src="`https://placehold.co/800x600?text=${encodeURIComponent(item.judul)}`" 
                   class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div class="absolute bottom-0 left-0 right-0 p-8 z-20 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
@@ -218,7 +125,7 @@ const navigate = (path: string) => {
                 <template #header>
                   <div class="aspect-video w-full overflow-hidden relative">
                     <img 
-                      :src="blog.thumbnail" 
+                      :src="blog.thumbnail ?? undefined" 
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div class="absolute top-3 left-3">
@@ -228,7 +135,7 @@ const navigate = (path: string) => {
                 </template>
                 
                 <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mb-3">
-                  <span class="flex items-center gap-1"><UIcon name="i-heroicons-calendar" /> {{ blog.created_at }}</span>
+                  <span class="flex items-center gap-1"><UIcon name="i-heroicons-calendar" /> {{ blog.published_at || blog.created_at }}</span>
                   <span class="flex items-center gap-1"><UIcon name="i-heroicons-eye" /> {{ blog.view_count }} views</span>
                 </div>
                 
@@ -250,4 +157,5 @@ const navigate = (path: string) => {
       </div>
 
     </main>
+  </NuxtLayout>
 </template>

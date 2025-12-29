@@ -67,6 +67,24 @@ export const useProjects = () => {
     }
   }
 
+  const getProjectBySlug = async (slug: string) => {
+    loading.value = true
+    try {
+      const res = await $fetch<{ data: ProjectDto }>(`/api/app/projects/slug/${slug}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token.value}`
+        }
+      })
+      return res.data
+    } catch (err) {
+      console.error('Fetch project failed:', err)
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   const createProject = async (data: CreateProjectDto) => {
     loading.value = true
     try {
@@ -127,6 +145,7 @@ export const useProjects = () => {
     loading,
     getProjects,
     getProject,
+    getProjectBySlug,
     createProject,
     updateProject,
     deleteProject

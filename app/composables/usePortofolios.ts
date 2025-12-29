@@ -27,9 +27,9 @@ export const usePortofolios = () => {
         headers: {
           'Authorization': `Bearer ${token.value}`
         },
-        query: { 
-          page: page, 
-          per_page: per_page 
+        query: {
+          page: page,
+          per_page: per_page
         }
       })
       return res
@@ -50,6 +50,21 @@ export const usePortofolios = () => {
           'Authorization': `Bearer ${token.value}`
         }
       })
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const getPortofolioBySlug = async (slug: string) => {
+    loading.value = true
+    try {
+      const res = await $fetch<{ data: PortofolioDto }>(`/api/app/portofolios/slug/${slug}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token.value}`
+        }
+      })
+      return res.data
     } finally {
       loading.value = false
     }
@@ -106,5 +121,6 @@ export const usePortofolios = () => {
     updatePortofolio,
     deletePortofolio,
     getPortofolio,
+    getPortofolioBySlug,
   }
 }

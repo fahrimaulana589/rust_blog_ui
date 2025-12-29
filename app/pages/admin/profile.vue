@@ -32,7 +32,7 @@
       </UFormField>
 
       <UFormField label="Years of Experience" name="years_of_experience">
-        <UInput v-model="state.years_of_experience" class="w-full" placeholder="Enter your years of experience" icon="i-heroicons-user" />
+        <UInput v-model="state.years_of_experience" type="number" class="w-full" placeholder="Enter your years of experience" icon="i-heroicons-user" />
       </UFormField>
 
       <UFormField label="Resume URL" name="resume_url">

@@ -1,33 +1,17 @@
 <script setup lang="ts">
-// --- MOCK DATA ---
+const { getProjects } = useProjects()
+const page = ref(1)
+const pageCount = 6
 
-const stacks = ref([
-  { id: 1, nama_stack: "React" },
-  { id: 2, nama_stack: "Tailwind" },
-  { id: 3, nama_stack: "Node.js" },
-  { id: 4, nama_stack: "PostgreSQL" }
-])
+const { data: projectResponse } = await useAsyncData('projects-list', async () => {
+  const res = await getProjects(page.value, pageCount)
+  return res && res.data ? res.data : { items: [], meta: { total_items: 0, page: 1, per_page: pageCount, total_pages: 0 } }
+}, {
+  watch: [page]
+})
 
-const projects = ref([
-  {
-    id: 1,
-    nama_projek: "E-Commerce Dashboard V2",
-    slug: "ecommerce-dashboard-v2",
-    deskripsi: "Dashboard analitik untuk manajemen toko online dengan fitur realtime reporting.",
-    status: "Completed",
-    progress: 100,
-    stacks: [stacks.value[0]!, stacks.value[1]!, stacks.value[3]!],
-  },
-  {
-    id: 2,
-    nama_projek: "Sistem Manajemen Inventaris",
-    slug: "inventory-system",
-    deskripsi: "Aplikasi pencatatan stok barang berbasis web untuk UMKM.",
-    status: "In Progress",
-    progress: 65,
-    stacks: [stacks.value[2]!, stacks.value[3]!],
-  }
-])
+const projects = computed(() => projectResponse.value?.items || [])
+const total = computed(() => projectResponse.value?.meta?.total_items || 0)
 
 const navigate = (path: string) => {
   navigateTo(path)
@@ -35,6 +19,7 @@ const navigate = (path: string) => {
 </script>
 
 <template>
+  <NuxtLayout>
     <main class="min-h-[calc(100vh-200px)] py-12">
         <UContainer>
           <div class="text-center mb-16 max-w-2xl mx-auto">
@@ -44,7 +29,7 @@ const navigate = (path: string) => {
               Daftar proyek teknis yang telah saya kerjakan dengan detail progress dan teknologi.
             </p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             <UCard 
               v-for="project in projects" 
               :key="project.id"
@@ -68,7 +53,7 @@ const navigate = (path: string) => {
                   <span class="text-gray-500 dark:text-gray-400">Completion</span>
                   <span>{{ project.progress }}%</span>
                 </div>
-                <UProgress :value="project.progress" color="primary" size="sm" />
+                <UProgress v-model="project.progress" color="primary" size="sm" />
               </div>
 
               <div class="flex flex-wrap gap-2 mb-6">
@@ -82,6 +67,11 @@ const navigate = (path: string) => {
               </UButton>
             </UCard>
           </div>
+
+          <div class="flex justify-center" v-if="total > pageCount">
+            <UPagination v-model:page="page" :page-count="pageCount" :total="total" />
+          </div>
         </UContainer>
     </main>
+  </NuxtLayout>
 </template>

@@ -1,11 +1,8 @@
 export default defineEventHandler(async (event) => {
-  const id = event.context.params?.id
-  const authHeader = getHeader(event, 'Authorization')
+  const id = getRouterParam(event, 'id')
 
-  return await $fetch(`http://localhost:8080/app/categories/${id}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': authHeader || ''
-    }
+  const res = await $fetch(`http://localhost:8080/app/categories/${id}`, {
+    method: 'GET'
   })
+  return res
 })

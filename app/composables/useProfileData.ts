@@ -1,17 +1,15 @@
-export const useProfileData = () => {
-  return useState('profile', () => ({
-    full_name: "Alex Devandra",
-    headline: "Senior Fullstack Engineer & UI Designer",
-    summary: "Mengubah ide kompleks menjadi solusi digital yang elegan. Berpengalaman 5+ tahun membangun aplikasi scalable.",
-    role: "Fullstack Developer",
-    location: "Jakarta, Indonesia",
-    profile_image: "https://i.pravatar.cc/300",
-    availability: "Open for Freelance",
-    resume_url: "#",
-    email: "alex@example.com",
-    years_of_experience: 5,
-    specializations: ["Web Development", "System Design", "Cloud Architecture"],
-    tech_focus: ["React", "NestJS", "TypeScript", "Docker"],
-    languages: [{ name: "Indonesian", level: "Native" }, { name: "English", level: "Professional" }]
-  }))
+import { useProfile } from './useProfile'
+import type { ProfileDto } from '../types/dto/profile.dto'
+
+export const useProfileData = async () => {
+  const { get_profile } = useProfile()
+
+  const { data } = await useAsyncData('global-profile', async () => {
+    const res = await get_profile()
+    console.log(res)
+    // get_profile returns { data: ProfileDto } or false/null
+    return (res && typeof res !== 'boolean' && res.data) ? res.data : null
+  })
+
+  return data as Ref<ProfileDto | null>
 }

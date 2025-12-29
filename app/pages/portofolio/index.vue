@@ -1,20 +1,17 @@
 <script setup lang="ts">
-// --- MOCK DATA ---
+const { getPortofolios } = usePortofolios()
+const page = ref(1)
+const pageCount = 6
 
-const portfolios = ref([
- {
-    id: 1,
-    judul: "Revamping E-Commerce Analytics",
-    slug: "case-study-ecommerce",
-    deskripsi: "Studi kasus bagaimana kami meningkatkan performa load data hingga 200% pada dashboard admin.",
-  },
-  {
-    id: 2,
-    judul: "Digitizing Local SME Inventory",
-    slug: "case-study-inventory",
-    deskripsi: "Transformasi pencatatan manual ke digital untuk efisiensi operasional.",
-  }
-])
+const { data: portfolioResponse } = await useAsyncData('portfolios-list', async () => {
+  const res = await getPortofolios(page.value, pageCount)
+  return res && res.data ? res.data : { items: [], meta: { total_items: 0, page: 1, per_page: pageCount, total_pages: 0 } }
+}, {
+  watch: [page]
+})
+
+const portfolios = computed(() => portfolioResponse.value?.items || [])
+const total = computed(() => portfolioResponse.value?.meta?.total_items || 0)
 
 const navigate = (path: string) => {
   navigateTo(path)
@@ -22,6 +19,7 @@ const navigate = (path: string) => {
 </script>
 
 <template>
+  <NuxtLayout>
     <main class="min-h-[calc(100vh-200px)] py-12">
         <UContainer>
            <div class="text-center mb-16 max-w-2xl mx-auto">
@@ -31,7 +29,7 @@ const navigate = (path: string) => {
               Studi kasus mendalam dari proyek-proyek terpilih.
             </p>
           </div>
-          <div class="space-y-16">
+          <div class="space-y-16 mb-12">
             <div 
               v-for="(item, idx) in portfolios" 
               :key="item.id" 
@@ -41,7 +39,7 @@ const navigate = (path: string) => {
               <div class="w-full md:w-1/2 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-200 dark:ring-gray-800 group cursor-pointer" @click="navigate(`/portofolio/${item.slug}`)">
                 <div class="aspect-[4/3] relative overflow-hidden">
                   <img 
-                    :src="`https://source.unsplash.com/random/800x600?tech,${item.id}`" 
+                    :src="`https://placehold.co/800x600?text=${encodeURIComponent(item.judul)}`" 
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
                   />
                   <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
@@ -69,6 +67,11 @@ const navigate = (path: string) => {
               </div>
             </div>
           </div>
+
+          <div class="flex justify-center" v-if="total > pageCount">
+            <UPagination v-model:page="page" :page-count="pageCount" :total="total" />
+          </div>
         </UContainer>
     </main>
+  </NuxtLayout>
 </template>

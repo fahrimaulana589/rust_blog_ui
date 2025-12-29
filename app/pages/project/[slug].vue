@@ -1,35 +1,18 @@
 <script setup lang="ts">
 const route = useRoute()
 const slug = route.params.slug as string
-// --- MOCK DATA ---
+const { getProjectBySlug } = useProjects()
 
-const stacks = ref([
-  { id: 1, nama_stack: "React" },
-  { id: 2, nama_stack: "Tailwind" },
-  { id: 3, nama_stack: "Node.js" },
-  { id: 4, nama_stack: "PostgreSQL" }
-])
-
-const selectedItem = ref({
-  id: 1,
-  nama_projek: "E-Commerce Dashboard V2",
-  slug: "ecommerce-dashboard-v2",
-  deskripsi: "Dashboard analitik untuk manajemen toko online dengan fitur realtime reporting.",
-  status: "Completed",
-  progress: 100,
-  tanggal_mulai: "2023-01-10",
-  link_demo: "https://demo.com",
-  repository: "https://github.com",
-  stacks: [stacks.value[0]!, stacks.value[1]!, stacks.value[3]!],
-  tanggal_selesai: "2023-04-10",
-  created_at: "2023-01-10",
-  updated_at: "2023-04-10"
+const { data: selectedItem } = await useAsyncData(`project-${slug}`, async () => {
+  const res = await getProjectBySlug(slug)
+  return res || null // useProjects getProjectBySlug returns res.data directly based on my edit
 })
 </script>
 
 <template>
+  <NuxtLayout>
     <main class="min-h-[calc(100vh-200px)] py-12">
-        <UContainer class="max-w-4xl">
+        <UContainer class="max-w-4xl" v-if="selectedItem">
            <UButton icon="i-heroicons-arrow-left" variant="ghost" class="mb-8 pl-0" to="/project">
             Back to Projects
           </UButton>
@@ -40,6 +23,7 @@ const selectedItem = ref({
                 <div>
                   <h1 class="text-3xl font-bold mb-2">{{ selectedItem.nama_projek }}</h1>
                   <p class="text-gray-500 dark:text-gray-400">Started on {{ selectedItem.tanggal_mulai }}</p>
+                  <p class="text-gray-500 dark:text-gray-400">Finished on {{ selectedItem.tanggal_selesai }}</p>
                 </div>
                 <UBadge :color="selectedItem.status === 'Completed' ? 'success' : 'warning'" size="lg" variant="subtle">{{ selectedItem.status }}</UBadge>
               </div>
@@ -54,7 +38,7 @@ const selectedItem = ref({
                 
                  <div>
                   <h3 class="text-lg font-semibold mb-3">Progress</h3>
-                  <UProgress :value="selectedItem.progress" color="primary" indicator />
+                  <UProgress v-model="selectedItem.progress" color="primary" indicator />
                 </div>
               </div>
               
@@ -81,4 +65,5 @@ const selectedItem = ref({
           </UCard>
         </UContainer>
     </main>
+  </NuxtLayout>
 </template>

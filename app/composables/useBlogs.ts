@@ -52,6 +52,21 @@ export const useBlogs = () => {
     }
   }
 
+  const getBlogBySlug = async (slug: string) => {
+    loading.value = true
+    try {
+      const res = await $fetch<{ data: BlogDto }>(`/api/app/blogs/slug/${slug}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token.value}`
+        }
+      })
+      return res.data
+    } finally {
+      loading.value = false
+    }
+  }
+
   const createBlog = async (payload: CreateBlogDto) => {
     loading.value = true
     try {
@@ -100,6 +115,7 @@ export const useBlogs = () => {
     loading,
     getBlogs,
     getBlog,
+    getBlogBySlug,
     createBlog,
     updateBlog,
     deleteBlog

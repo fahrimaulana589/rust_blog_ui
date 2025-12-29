@@ -1,22 +1,21 @@
 <script setup lang="ts">
+import { lo } from '@nuxt/ui/runtime/locale/index.js'
+
 const route = useRoute()
 const slug = route.params.slug as string
-// --- MOCK DATA ---
+const { getPortofolioBySlug } = usePortofolios()
 
-const selectedItem = ref({
-    id: 1,
-    judul: "Revamping E-Commerce Analytics",
-    slug: "case-study-ecommerce",
-    deskripsi: "Studi kasus bagaimana kami meningkatkan performa load data hingga 200% pada dashboard admin.",
-    project: {
-        nama_projek: "E-Commerce Dashboard V2"
-    }
-  })
+const { data: selectedItem } = await useAsyncData(`portfolio-${slug}`, async () => {
+  const res = await getPortofolioBySlug(slug)
+  return res || null
+})
+console.log(selectedItem.value)
 </script>
 
 <template>
+  <NuxtLayout>
     <main class="min-h-[calc(100vh-200px)] py-12">
-        <UContainer class="max-w-5xl">
+        <UContainer class="max-w-5xl" v-if="selectedItem">
            <UButton icon="i-heroicons-arrow-left" variant="ghost" class="mb-8 pl-0" to="/portofolio">
             Back to Showcase
           </UButton>
@@ -29,53 +28,86 @@ const selectedItem = ref({
           
           <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800">
              <div class="w-full aspect-[21/9] bg-gray-100 dark:bg-gray-800 relative">
-                <img :src="`https://source.unsplash.com/random/1200x600?tech,${selectedItem.id}`" class="w-full h-full object-cover" />
+                <img :src="`https://placehold.co/1200x600?text=${encodeURIComponent(selectedItem.judul)}`" class="w-full h-full object-cover" />
              </div>
              
              <div class="p-8 md:p-16">
                 <div class="grid md:grid-cols-12 gap-12">
                     <div class="md:col-span-8 prose prose-lg dark:prose-invert">
-                        <h3>The Challenge</h3>
+                        <h3>About the Project</h3>
                         <p>
-                            Proyek <strong>{{ selectedItem.project.nama_projek }}</strong> ini bertujuan untuk menyelesaikan masalah efisiensi data yang dihadapi klien.
-                            Tantangan utamanya adalah mengintegrasikan sistem lama dengan arsitektur modern tanpa mengganggu operasional harian.
+                            {{ selectedItem.project.deskripsi }}
                         </p>
-                        <h3>The Solution</h3>
-                        <p>
-                            Kami menggunakan pendekatan microservices dengan <strong>NestJS</strong> untuk memastikan skalabilitas. Di sisi frontend, <strong>React</strong> digunakan untuk memberikan pengalaman pengguna yang interaktif dan responsif.
-                        </p>
-                        <ul>
-                          <li>Optimasi query database hingga 40% lebih cepat.</li>
-                          <li>Implementasi caching layer menggunakan Redis.</li>
-                          <li>Deployment otomatis dengan CI/CD pipeline.</li>
-                        </ul>
                     </div>
                     
-                    <div class="md:col-span-4 space-y-8">
-                        <div class="p-6 rounded-2xl bg-gray-50 dark:bg-gray-800/50 space-y-6">
-                            <div>
-                                <span class="block text-xs font-bold text-gray-400 uppercase mb-1 tracking-wider">Client</span>
-                                <span class="text-gray-900 dark:text-white font-medium">Confidential Corp.</span>
+                    <div class="md:col-span-4 space-y-6">
+                        <UCard :ui="{ body: 'p-6 space-y-6' }" class="bg-gray-50 dark:bg-gray-800/50 border-0 dark:border dark:border-gray-800 shadow-none ring-1 ring-gray-200 dark:ring-gray-800">
+                            <div v-if="selectedItem.project?.status">
+                                <h3 class="text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Status</h3>
+                                <span class="capitalize font-medium" :class="selectedItem.project.status === 'Completed' ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'">
+                                  {{ selectedItem.project.status }}
+                                </span>
                             </div>
-                            <div class="h-px bg-gray-200 dark:bg-gray-700"></div>
-                            <div>
-                                <span class="block text-xs font-bold text-gray-400 uppercase mb-1 tracking-wider">Services</span>
-                                <span class="text-gray-900 dark:text-white font-medium">Fullstack Dev, UI/UX Design</span>
+                            
+                            <div v-if="selectedItem.project?.stacks?.length">
+                                <h3 class="text-xs font-bold uppercase text-gray-400 mb-3 tracking-wider">Tech Stack</h3>
+                                <div class="flex flex-wrap gap-2">
+                                  <UBadge 
+                                    v-for="stack in selectedItem.project.stacks" 
+                                    :key="stack.id" 
+                                    color="neutral" 
+                                    class="text-gray-700 dark:text-gray-200 dark:bg-gray-700 ring-1 ring-gray-200 dark:ring-gray-700"
+                                  >
+                                    {{ stack.nama_stack }}
+                                  </UBadge>
+                                </div>
                             </div>
-                            <div class="h-px bg-gray-200 dark:bg-gray-700"></div>
-                            <div>
-                                <span class="block text-xs font-bold text-gray-400 uppercase mb-1 tracking-wider">Year</span>
-                                <span class="text-gray-900 dark:text-white font-medium">2023</span>
+
+                            <div v-if="selectedItem.project?.tanggal_mulai">
+                                <h3 class="text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Timeline</h3>
+                                <div class="space-y-1">
+                                  <div class="flex justify-between text-sm">
+                                    <span class="text-gray-500">Started</span>
+                                    <span class="font-medium text-gray-900 dark:text-white">{{ selectedItem.project.tanggal_mulai }}</span>
+                                  </div>
+                                  <div v-if="selectedItem.project?.tanggal_selesai" class="flex justify-between text-sm">
+                                    <span class="text-gray-500">Finished</span>
+                                    <span class="font-medium text-gray-900 dark:text-white">{{ selectedItem.project.tanggal_selesai }}</span>
+                                  </div>
+                                </div>
                             </div>
-                        </div>
+                        </UCard>
                         
-                        <UButton size="xl" block color="neutral" icon="i-heroicons-arrow-top-right-on-square">
-                           Visit Live Site
-                        </UButton>
+                        <div class="flex flex-col gap-3">
+                           <UButton 
+                              v-if="selectedItem.project?.link_demo" 
+                              :to="selectedItem.project.link_demo" 
+                              target="_blank"
+                              block 
+                              color="primary" 
+                              size="lg"
+                              icon="i-heroicons-globe-alt"
+                            >
+                               Live Demo
+                            </UButton>
+
+                            <UButton 
+                              v-if="selectedItem.project?.repository" 
+                              :to="selectedItem.project.repository" 
+                              target="_blank"
+                              block 
+                              color="neutral" 
+                              size="lg"
+                              icon="i-simple-icons-github"
+                            >
+                               View Repository
+                            </UButton>
+                        </div>
                     </div>
                 </div>
              </div>
           </div>
         </UContainer>
     </main>
+  </NuxtLayout>
 </template>
