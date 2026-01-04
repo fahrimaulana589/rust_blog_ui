@@ -33,9 +33,6 @@ export const useProjects = () => {
         }
       })
       return res
-    } catch (err) {
-      console.error('Fetch projects failed:', err)
-      throw err
     } finally {
       loading.value = false
     }
@@ -59,9 +56,6 @@ export const useProjects = () => {
         }
       })
       return res.data
-    } catch (err) {
-      console.error('Fetch project failed:', err)
-      throw err
     } finally {
       loading.value = false
     }
@@ -77,9 +71,6 @@ export const useProjects = () => {
         }
       })
       return res.data
-    } catch (err) {
-      console.error('Fetch project failed:', err)
-      throw err
     } finally {
       loading.value = false
     }
@@ -96,9 +87,6 @@ export const useProjects = () => {
         body: data
       })
       return true
-    } catch (err) {
-      console.error('Create project failed:', err)
-      throw err
     } finally {
       loading.value = false
     }
@@ -115,9 +103,6 @@ export const useProjects = () => {
         body: data
       })
       return true
-    } catch (err) {
-      console.error('Update project failed:', err)
-      throw err
     } finally {
       loading.value = false
     }
@@ -133,9 +118,6 @@ export const useProjects = () => {
         }
       })
       return true
-    } catch (err) {
-      console.error('Delete project failed:', err)
-      throw err
     } finally {
       loading.value = false
     }

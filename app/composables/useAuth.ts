@@ -23,10 +23,8 @@ export const useAuth = () => {
       }
 
       return false
-    } catch (err) {
-      console.error('Login failed:', err)
-      return false
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -54,10 +52,8 @@ export const useAuth = () => {
       }
 
       return false
-    } catch (err) {
-      console.error('Forgot password failed:', err)
-      return false
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -80,10 +76,8 @@ export const useAuth = () => {
       }
 
       return false
-    } catch (err) {
-      console.error('Reset password failed:', err)
-      return false
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -103,11 +97,8 @@ export const useAuth = () => {
       }
 
       return true
-    } catch (err) {
-      token.value = null
-      email.value = null
-      return false
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }

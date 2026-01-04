@@ -14,9 +14,6 @@ export const useProfile = () => {
         }
       })
       return res
-    } catch (err) {
-      console.error('Profile failed:', err)
-      return false
     } finally {
       loading.value = false
     }
@@ -33,9 +30,6 @@ export const useProfile = () => {
         body: data
       })
       return res
-    } catch (err) {
-      console.error('Profile failed:', err)
-      return false
     } finally {
       loading.value = false
     }

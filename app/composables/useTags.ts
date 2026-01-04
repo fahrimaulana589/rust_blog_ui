@@ -30,10 +30,8 @@ export const useTags = () => {
         query: { page, per_page }
       })
       return res
-    } catch (err) {
-      console.error('Fetch tags failed:', err)
-      throw err
-    } finally {
+    } 
+    finally {
       loading.value = false
     }
   }

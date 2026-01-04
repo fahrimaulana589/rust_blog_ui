@@ -1,9 +1,8 @@
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
-  const res = await $fetch('http://localhost:8080/app/categories', {
+  return await $fetch('http://localhost:8080/app/categories', {
     method: 'GET',
     query
   })
-  return res
 })

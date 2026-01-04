@@ -6,8 +6,6 @@ export const useProfileData = async () => {
 
   const { data } = await useAsyncData('global-profile', async () => {
     const res = await get_profile()
-    console.log(res)
-    // get_profile returns { data: ProfileDto } or false/null
     return (res && typeof res !== 'boolean' && res.data) ? res.data : null
   })
 

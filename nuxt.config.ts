@@ -14,6 +14,17 @@ export default defineNuxtConfig({
       tailwindcss()
     ]
   },
+  nitro:{
+    prerender:{
+      routes:[
+        '/',
+        '/blog',
+        '/portofolio',
+        '/project',
+      ],
+      crawlLinks: false,
+    }
+  },
   runtimeConfig: {
     public: {
       apiBase: 'http://localhost:8080',

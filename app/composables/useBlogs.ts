@@ -30,9 +30,6 @@ export const useBlogs = () => {
         query: { page, per_page }
       })
       return res
-    } catch (err) {
-      console.error('Fetch blogs failed:', err)
-      throw err
     } finally {
       loading.value = false
     }

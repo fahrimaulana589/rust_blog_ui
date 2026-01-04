@@ -33,9 +33,6 @@ export const usePortofolios = () => {
         }
       })
       return res
-    } catch (err) {
-      console.error('Fetch stacks failed:', err)
-      throw err
     } finally {
       loading.value = false
     }

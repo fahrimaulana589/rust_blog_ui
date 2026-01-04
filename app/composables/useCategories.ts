@@ -30,9 +30,6 @@ export const useCategories = () => {
         query: { page, per_page }
       })
       return res
-    } catch (err) {
-      console.error('Fetch categories failed:', err)
-      throw err
     } finally {
       loading.value = false
     }
