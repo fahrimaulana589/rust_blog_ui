@@ -1,7 +1,8 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const authHeader = getHeader(event, 'Authorization')
 
-  return await $fetch('http://localhost:8080/app/islogin', {
+  return await $fetch(`${config.public.apiBase}/app/islogin`, {
     method: 'GET',
     headers: {
       'Authorization': authHeader || ''

@@ -1,7 +1,8 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const slug = getRouterParam(event, 'slug')
 
-  return await $fetch(`http://localhost:8080/app/blogs/slug/${slug}`, {
+  return await $fetch(`${config.public.apiBase}/app/blogs/slug/${slug}`, {
     method: 'GET'
   })
 })

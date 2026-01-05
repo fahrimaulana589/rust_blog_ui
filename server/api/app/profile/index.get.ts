@@ -1,5 +1,6 @@
 export default defineEventHandler(async (event) => {
-  return await $fetch('http://localhost:8080/app/profile', {
+  const config = useRuntimeConfig()
+  return await $fetch(`${config.public.apiBase}/app/profile`, {
     method: 'GET'
   })
 })

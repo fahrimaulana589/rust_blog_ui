@@ -1,8 +1,9 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const body = await readBody(event)
-  
-  return await $fetch('http://localhost:8080/forgot-password', {
-    method: 'POST',             
+
+  return await $fetch(`${config.public.apiBase}/forgot-password`, {
+    method: 'POST',
     body
-  }) 
+  })
 })

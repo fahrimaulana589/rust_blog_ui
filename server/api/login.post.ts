@@ -1,7 +1,8 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
+  const config = useRuntimeConfig()
 
-  return await $fetch('http://localhost:8080/login', {
+  return await $fetch(`${config.public.apiBase}/login`, {
     method: 'POST',
     body
   })

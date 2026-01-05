@@ -1,7 +1,8 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const id = event.context.params?.id
 
-  return await $fetch(`http://localhost:8080/app/tags/${id}`, {
+  return await $fetch(`${config.public.apiBase}/app/tags/${id}`, {
     method: 'GET'
   })
 })

@@ -1,8 +1,9 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const id = event.context.params?.id
   const authHeader = getHeader(event, 'Authorization')
 
-  return await $fetch(`http://localhost:8080/app/stacks/${id}`, {
+  return await $fetch(`${config.public.apiBase}/app/stacks/${id}`, {
     method: 'DELETE',
     headers: {
       'Authorization': authHeader || ''

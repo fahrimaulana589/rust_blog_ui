@@ -1,8 +1,9 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const body = await readBody(event)
   const authHeader = getHeader(event, 'Authorization')
 
-  return await $fetch('http://localhost:8080/app/profile', {
+  return await $fetch(`${config.public.apiBase}/app/profile`, {
     method: 'POST',
     headers: {
       'Authorization': authHeader + ''

@@ -14,20 +14,12 @@ export default defineNuxtConfig({
       tailwindcss()
     ]
   },
-  nitro:{
-    prerender:{
-      routes:[
-        '/',
-        '/blog',
-        '/portofolio',
-        '/project',
-      ],
-      crawlLinks: false,
-    }
+  nitro: {
+    preset: "cloudflare-pages"
   },
   runtimeConfig: {
     public: {
-      apiBase: 'http://localhost:8080',
+      apiBase: 'https://api_blog.projeku.qzz.io',
     },
   },
 })
