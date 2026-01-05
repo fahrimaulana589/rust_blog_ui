@@ -40,7 +40,7 @@ const navigate = (path: string) => {
         <img :src="selectedItem.thumbnail || undefined" class="w-full aspect-video object-cover rounded-2xl mb-10 shadow-lg ring-1 ring-gray-200 dark:ring-gray-800" />
         
         <div class="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
-          {{ selectedItem.content }}
+          <div v-html="selectedItem.content"></div>
         </div>
         
         <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
