@@ -26,8 +26,9 @@ const navigate = (link: string) => {
       <UContainer>
         <div class="flex justify-between h-16 items-center">
           <div class="flex items-center gap-3 cursor-pointer" @click="navigate('/')">
-            <UAvatar :src="profile?.profile_image" alt="Profile" size="sm" />
-            <span class="text-xl font-bold text-primary-500 dark:text-primary-400">Dev.</span>
+            <span class="text-xl font-bold text-primary-500 dark:text-primary-400">
+              {{ profile?.full_name }}
+            </span>
           </div>
           
           <div class="hidden md:flex space-x-1 items-center">

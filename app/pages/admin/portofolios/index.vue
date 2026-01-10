@@ -131,7 +131,6 @@ const state = reactive({
 const columns: TableColumn<PortofolioDto>[] = [
   { accessorKey: 'judul', header: 'Judul' },
   { accessorKey: 'project.nama_projek', header: 'Project' },
-  { accessorKey: 'deskripsi', header: 'Deskripsi' },
   { accessorKey: 'is_active', header: 'Is Active' },
   { id: 'actions', header: 'Actions' }
 ]

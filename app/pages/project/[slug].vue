@@ -33,7 +33,9 @@ const { data: selectedItem } = await useAsyncData(`project-${slug}`, async () =>
               <div class="md:col-span-2 space-y-6">
                 <div>
                   <h3 class="text-lg font-semibold mb-3">About the Project</h3>
-                  <p class="text-gray-600 dark:text-gray-300 leading-relaxed">{{ selectedItem.deskripsi }}</p>
+                  <p class="text-gray-600 dark:text-gray-300 prose prose-lg">
+                    <div v-html="selectedItem.deskripsi"></div>
+                  </p>
                 </div>
                 
                  <div>

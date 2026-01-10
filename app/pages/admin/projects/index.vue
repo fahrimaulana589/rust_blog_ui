@@ -43,7 +43,14 @@
           </UFormField>
           
           <UFormField label="Description" name="deskripsi">
-             <UTextarea class="w-full" v-model="state.deskripsi" placeholder="Describe your project..." />
+             <UEditor 
+             class="w-full min-h-21" v-model="state.deskripsi" 
+             placeholder="Full content..." 
+             v-slot="{ editor }"
+             content-type="html"
+             >
+             <UEditorToolbar :editor="editor" :items="item_editors" />
+             </UEditor>
           </UFormField>
 
           <UFormField label="Status" name="status">
@@ -100,6 +107,21 @@ import * as v from 'valibot'
 import type { FormSubmitEvent, TableColumn } from '@nuxt/ui'
 import type { ProjectDto, CreateProjectDto } from '~/types/dto/project.dto'
 import type { StackDto } from '~/types/dto/stack.dto'
+import type { EditorToolbarItem } from '@nuxt/ui'
+
+const item_editors: EditorToolbarItem[] = [
+  { kind: 'mark', mark: 'bold', icon: 'i-lucide-bold' },
+  { kind: 'mark', mark: 'italic', icon: 'i-lucide-italic' },
+  { kind: 'heading', level: 1, icon: 'i-lucide-heading-1' },
+  { kind: 'heading', level: 2, icon: 'i-lucide-heading-2' },
+  { kind: 'heading', level: 3, icon: 'i-lucide-heading-3' },
+  { kind: 'bulletList', icon: 'i-lucide-list' },
+  { kind: 'codeBlock', icon: 'i-lucide-code' },
+  { kind: 'orderedList', icon: 'i-lucide-list-ordered' },
+  { kind: 'blockquote', icon: 'i-lucide-quote' },
+  { kind: 'link', icon: 'i-lucide-link' }
+]
+
 
 definePageMeta({
   middleware: 'auth',

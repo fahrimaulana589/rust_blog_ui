@@ -35,14 +35,12 @@ console.log(selectedItem.value)
                 <div class="grid md:grid-cols-12 gap-12">
                     <div class="md:col-span-8 prose prose-lg dark:prose-invert">
                         <h3>About the Project</h3>
-                        <p>
-                            {{ selectedItem.project.deskripsi }}
-                        </p>
+                        <div v-html="selectedItem.project.deskripsi"></div>
                     </div>
                     
                     <div class="md:col-span-4 space-y-6">
                         <UCard :ui="{ body: 'p-6 space-y-6' }" class="bg-gray-50 dark:bg-gray-800/50 border-0 dark:border dark:border-gray-800 shadow-none ring-1 ring-gray-200 dark:ring-gray-800">
-                            ``<div v-if="selectedItem.project?.status">
+                            <div v-if="selectedItem.project?.status">
                                 <h3 class="text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Status</h3>
                                 <span class="capitalize font-medium" :class="selectedItem.project.status === 'Completed' ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'">
                                   {{ selectedItem.project.status }}
